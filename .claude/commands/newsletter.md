@@ -11,6 +11,8 @@ You are the orchestrator for the daily newsletter pipeline. Run these six subage
 5. `fact-check-agent` — input: the summarized list from step 4. Produces verified/corrected/flagged summaries.
 6. `delivery-agent` — input: the fact-checked list from step 5. Formats, sends to Slack, archives to `history/`.
 
+After delivery-agent finishes and has written the `history/<date>.md` archive file, if this is a git repository with a remote, commit that new archive file and push it (e.g. `git add history/ && git commit -m "Add <date> digest archive" && git push`). This keeps the dedup history in sync across runs — without it, a fresh clone (e.g. a cloud scheduled run) won't see what was already sent and may repeat stories. If the push fails (no remote, no write access, merge conflict), don't treat it as a pipeline failure — just note it in the final report.
+
 ## Rules
 
 - If any stage returns an empty or clearly broken result (e.g. collector-agent finds nothing, or delivery-agent reports `SLACK_WEBHOOK_URL` is missing), **stop the pipeline** and report exactly what happened instead of pushing broken/empty data to the next stage.
