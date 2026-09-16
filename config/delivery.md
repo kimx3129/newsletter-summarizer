@@ -8,9 +8,9 @@ delivery-agent attempts only the channels marked "yes" below, AND only if that c
 - Gmail: no
 - Notion: no
 
-## Slack (Incoming Webhook)
-- Env var: `SLACK_WEBHOOK_URL`
-- POST a JSON payload (Block Kit or plain `text` with `mrkdwn`) to the webhook URL.
+## Slack
+- **Primary: MCP connector.** Channel: `#daily-it-newsletter` (channel_id: `C0BG1V88AHL`, workspace: sungmin-workspace). Requires the Slack connector to be connected at https://claude.ai/customize/connectors and attached to whichever routine/session is running this pipeline. Cloud routine sandboxes block direct internet access to `hooks.slack.com`, so this is the only path that reliably works for scheduled runs — see delivery-agent.md for the exact tool call.
+- **Fallback: Incoming Webhook.** Env var: `SLACK_WEBHOOK_URL`. POST a JSON payload (Block Kit or plain `text` with `mrkdwn`) to the webhook URL. Works for local/manual runs; expect it to fail in the cloud sandbox due to the egress block above.
 
 ## Discord (Incoming Webhook)
 - Env var: `DISCORD_WEBHOOK_URL`
